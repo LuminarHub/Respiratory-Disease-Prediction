@@ -1,0 +1,183 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>LungWell</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/icon" href="{% static 'images/short.webp' %}" style="border-radius: 0.75rem;">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <style>
+    #showcase-background-1 {
+   
+   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+       url("{% static 'images/main.jpg' %}");
+   height: 655px;
+   width:100%;
+}
+
+  </style>
+</head>
+ 
+  <body>
+        <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark-secondary sticky-top">
+            <div class="container">
+                <a href="{% url 'h' %}" class="navbar-brand" href="#" style="font-size: 30px;font-family: 'Times New Roman', Times, serif;font-style: italic;">LungWell</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'h' %}">Home
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                        </li>
+                    
+                        <li class="nav-item ml-5">
+                            <a class=" btn btn-outline-danger nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'predict' %}">Start Diagnosis </a>
+                        </li>
+                        <li class="nav-item ml-5">
+                            <a class=" nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+{% block bot %}
+    <main>
+        <section class="background grid " id="showcase-background-1">
+            <div class="container text-white" style="margin-top:300px;">
+                <h1 class=" mb-3" style="font-size: 70px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">LungWell</h1>
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <p>Respiratory diseases are a group of diseases that affect the airways and other structures of the lung. They range from acute infections such as pneumonia and bronchitis to chronic conditions like asthma, chronic obstructive pulmonary disease (COPD), and lung cancer.</p>
+                    </div>
+                </div>
+                {% comment %} <a class="pr-5 pl-5 pt-2 pb-2 text-white btn text-uppercase font-weight-bold btn-gradient" href="#">Order Now</a> {% endcomment %}
+            </div>
+        </section>
+
+ </main>
+ <section class="pb-5 pt-5 bg-dark-secondary text-white" style="line-height: 1.5rem;">
+<header>
+        <h2 class="text-center mb-4 ">Respiratory Disease Information</h2>
+    </header>
+    <div class="container">
+        <img class="mb-3" src="{% static 'images/home.webp' %}"  alt="" height="450px" width="700px" style="margin-left: 200px;">
+
+        <h2>Respiratory Disease</h2>
+        <p><strong>Overview:</strong> The respiratory system, made up of the lungs, airways, and muscles involved in breathing, plays a crucial role in oxygenating the body and removing carbon dioxide. Respiratory diseases affect these processes, making it harder for the body to function properly.</p>
+        <p><strong>Significance:</strong> Respiratory diseases are among the leading causes of death worldwide. Conditions like asthma, chronic obstructive pulmonary disease (COPD), and pneumonia impact millions of lives each year.</p>
+        <p><strong>Prevalence:</strong> More than 300 million people worldwide suffer from asthma alone, with COPD being one of the most common and preventable causes of death.</p>
+    
+        <h2>Common Symptoms and Warning Signs</h2>
+        <div class="row">
+            <div class="col">
+                <img class="mb-3" src="{% static 'images/s2.jpg' %}"  alt="" height="450px" width="700px" >
+            </div>
+            <div class="col">
+                <img class="mb-3" src="{% static 'images/s1.png' %}"  alt="" height="450px" >
+            </div>
+        </div>
+        <ul>
+            <li><strong>Shortness of Breath:</strong> Difficulty breathing or feeling out of breath during normal activities, a common sign of asthma, COPD, or pneumonia.</li>
+            <li><strong>Chronic Cough:</strong> A persistent cough that lasts longer than three weeks may signal conditions like chronic bronchitis, asthma, or lung cancer.</li>
+            <li><strong>Wheezing:</strong> A high-pitched whistling sound when breathing, often associated with asthma, COPD, or infections like pneumonia.</li>
+            <li><strong>Chest Tightness:</strong> A feeling of pressure or tightness in the chest that can occur with asthma, COPD, or even during a heart attack.</li>
+            <li><strong>Fatigue:</strong> Difficulty staying active due to constant fatigue, which can result from chronic respiratory disease.</li>
+        </ul>
+        <h2>Understanding Respiratory Health</h2>
+        <p><strong>Structure and Function:</strong> The lungs are responsible for gas exchange—taking in oxygen and expelling carbon dioxide. The airways, including the trachea and bronchi, serve as passageways for air. Proper lung function is vital for energy, immune health, and overall well-being.</p>
+        <p><strong>Breathing Mechanics:</strong> Breathing involves the diaphragm and ribcage expanding and contracting to push air in and out of the lungs. Any disruption in this process, such as airway constriction in asthma or fluid buildup in pneumonia, can impair breathing.</p>
+        <p><strong>Importance of Respiratory Health:</strong> Maintaining strong lungs through exercise, avoiding smoking, and staying hydrated is essential for keeping the respiratory system functioning well.</p>
+    
+        <h2>Types of Respiratory Diseases</h2>
+        <img class="mb-3" src="{% static 'images/types.jpg' %}"  alt="" height="450px" width="700px" style="margin-left: 200px;">
+
+        <ul>
+            <li><strong>Asthma:</strong> A chronic inflammatory disease that causes wheezing, breathlessness, and coughing due to narrowed airways. Triggers include allergens, smoke, and physical activity.</li>
+            <li><strong>Chronic Obstructive Pulmonary Disease (COPD):</strong> A progressive lung disease primarily caused by smoking, characterized by airflow obstruction and difficulty breathing. Includes emphysema and chronic bronchitis.</li>
+            <li><strong>Chronic Bronchitis:</strong> A condition where the airways become inflamed and produce excessive mucus, leading to coughing and breathing difficulties. It's a type of COPD but can also occur in isolation.</li>
+            <li><strong>Pneumonia:</strong> An infection of the lungs caused by bacteria, viruses, or fungi. It leads to inflammation and fluid accumulation in the air sacs of the lungs, making it hard to breathe.</li>
+            <li><strong>Tuberculosis (TB):</strong> A bacterial infection that primarily affects the lungs, causing chronic cough, weight loss, and chest pain. It is spread through airborne droplets.</li>
+            <li><strong>Lung Cancer:</strong> Cancer that begins in the lungs and can spread to other parts of the body. Smoking is the leading cause, but environmental factors like radon and air pollution also contribute.</li>
+        </ul>
+    </div>
+    <header>
+        <h2 class="text-center mb-4  mt-5">Causes and Risk Factors</h2>
+    </header>
+    <div>
+    <img src="{% static 'images/system2.jpg' %}"  alt=""  width="700px" style="margin-left: 400px;">
+    </div>
+    <div class="container mt-4">
+        <ul>
+            <li><strong>Genetic Factors:</strong> Certain respiratory diseases, like cystic fibrosis and some types of asthma, are hereditary. Genetic mutations can affect lung function and predispose individuals to specific conditions.</li>
+            <li><strong>Environmental Factors:</strong> Exposure to pollutants, chemicals, and allergens can irritate the respiratory system, making individuals more susceptible to conditions like asthma, COPD, and lung cancer.</li>
+            <li><strong>Lifestyle Factors:</strong> Smoking is the leading cause of respiratory diseases, particularly COPD and lung cancer. A sedentary lifestyle, poor diet, and exposure to secondhand smoke can also contribute to respiratory issues.</li>
+            <li><strong>Infections:</strong> Viruses (e.g., influenza, COVID-19) and bacteria (e.g., Streptococcus pneumoniae) can lead to respiratory infections that damage lung tissue and increase the risk of chronic conditions.</li>
+            <li><strong>Other Health Conditions:</strong> Diseases like heart disease and diabetes can exacerbate respiratory conditions due to weakened immunity and other systemic effects on the body.</li>
+        </ul>
+    </div>
+    <header>
+        <h2 class="text-center mb-4  mt-5">Diagnosis and Testing</h2>
+    </header>
+    <!-- <div>
+        <img src="{% static 'images/types.webp' %}"  alt="" height="450px" width="700px" style="margin-left: 400px;">
+        </div> -->
+    <div class="container mt-5">
+        <ul>
+            <li><strong>Physical Examination:</strong> Doctors listen for abnormal lung sounds using a stethoscope, which can help diagnose wheezing, crackles, or other signs of infection.</li>
+            <li><strong>Imaging Tests:</strong> X-rays or CT scans help visualize lung abnormalities such as tumors, fluid buildup, or infections. A chest X-ray is often the first step in diagnosing pneumonia or lung cancer.</li>
+            <li><strong>Pulmonary Function Tests (PFTs):</strong> These tests measure the amount of air you can breathe in and out and how quickly you can do it. This helps assess conditions like asthma and COPD.</li>
+            <li><strong>Blood Tests:</strong> Blood samples can reveal signs of infection, inflammation, or respiratory failure, helping diagnose conditions like pneumonia or TB.</li>
+            <li><strong>Bronchoscopy:</strong> A procedure in which a flexible tube with a camera is inserted into the airways to look for abnormalities or collect tissue samples for biopsy.</li>
+        </ul>
+        <h2>Treatment Options:</h2>
+        <img class="mb-3" src="{% static 'images/1.jpg' %}"  alt=""  width="700px" style="margin-left: 150px;">
+        <ul>
+            <li><strong>Medications:</strong> Common drugs include bronchodilators, which open airways, and corticosteroids, which reduce inflammation. Inhalers are often prescribed for conditions like asthma and COPD.</li>
+            <li><strong>Oxygen Therapy:</strong> For those with severe conditions like COPD, supplemental oxygen helps increase oxygen levels in the blood and reduce strain on the heart and lungs.</li>
+            <li><strong>Surgery:</strong> In cases of severe lung damage or lung cancer, surgeries like lung resections or transplants may be necessary to improve quality of life and survival.</li>
+            <li><strong>Pulmonary Rehabilitation:</strong> This involves physical therapy, breathing exercises, and education to help patients manage symptoms and improve lung function.</li>
+        </ul>
+        <h2>Lifestyle and Home Care for Respiratory Diseases</h2>
+        <ul>
+            <li><strong>Daily Management:</strong> Individuals with asthma or COPD can manage symptoms by avoiding triggers, taking prescribed medications regularly, and using inhalers.</li>
+            <li><strong>Breathing Exercises:</strong> Techniques like pursed-lip breathing and diaphragmatic breathing help improve airflow and reduce shortness of breath.</li>
+            <li><strong>Air Quality:</strong> Using air purifiers at home and reducing exposure to allergens like pollen, dust, and smoke can help minimize symptoms.</li>
+            <li><strong>Smoking Cessation:</strong> Quitting smoking is the most important step for improving lung health and reducing the risk of developing serious conditions like COPD and lung cancer.</li>
+        </ul>
+        <h2>Prevention and Health Maintenance:</h2>
+        <ul>
+            <li><strong>Avoiding Risk Factors:</strong> Staying away from smoking, industrial pollutants, and secondhand smoke reduces the risk of many respiratory diseases.</li>
+            <li><strong>Vaccinations:</strong> Vaccines like the flu vaccine, pneumococcal vaccine, and COVID-19 vaccine are essential for preventing respiratory infections that can lead to more serious complications.</li>
+            <li><strong>Regular Exercise:</strong> Physical activity, particularly aerobic exercises, helps improve lung capacity and overall respiratory health. Yoga and breathing exercises are particularly helpful for those with asthma.</li>
+            <li><strong>Healthy Diet:</strong> A diet rich in fruits, vegetables, and antioxidants can reduce inflammation in the body and help maintain healthy lung function.</li>
+        </ul>
+       
+    </div>
+    
+ </section> 
+        
+
+    <footer class="text-center text-white pt-3 pb-3 " style="background-color:black;">
+        <div class="container d-flex align-items-center justify-content-between ">
+            
+          
+                <p style="margin-left:400px;">&copy; 2024 Respiratory Disease Information Center</p>
+            
+        </div>
+    </footer> 
+{% endblock %}
+  </body>
+</html>

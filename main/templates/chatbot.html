@@ -1,0 +1,508 @@
+{% extends "home.html" %}
+{% block bot %}
+{% load static %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fontawesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+
+    <div class="health-assistant-container">
+        <div class="chat-interface">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div>
+                    <h4 class="mb-0"><i class="fas fa-robot me-2"></i>AI Health Assistant</h4>
+                    <small>Disease Prediction & Insights</small>
+                </div>
+                <div>
+                    <i class="fas fa-info-circle" data-bs-toggle="modal" data-bs-target="#helpModal"></i>
+                </div>
+            </div>
+
+            <!-- Chat Body -->
+            <div class="chat-body" id="chatBody">
+                <div class="message bot-message">
+                    <p>👋 Hello! I'm your AI Health Assistant. Upload an image or type your health-related query.</p>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                
+                <div class="file-upload me-2">
+                    <div class="row">
+                        <div class="col">
+                            <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                            <div class="file-upload-button">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div id="imagePreviewContainer" class="text-center">
+                            <img id="imagePreview" style="display: none; max-width: 50px; max-height: 45px; border-radius: 8px;">
+                        </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+                <div class="flex-grow-1">
+                    <textarea 
+                        id="userInput" 
+                        class="form-control" 
+                        placeholder="Type your message or health concern..."
+                        rows="2"></textarea>
+                    <!-- <div id="imagePreviewContainer" class="text-center">
+                        <img id="imagePreview" style="display: none;">
+                    </div> -->
+                </div>
+                
+                <button class="btn btn-primary ms-2" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">How to Use</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>🖼️ Upload an image for finding  the disease</p>
+                    <p>💬 Type additional details or questions</p>
+                    <p>🤖 Our AI will provide insights and predictions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImage(event) {
+            const imagePreview = document.getElementById('imagePreview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function predictDisease(imageFile) {
+                const chatBody = document.getElementById('chatBody');
+                const formData = new FormData();
+                formData.append('image', imageFile);
+
+                // Create loading message
+                const loadingMessageDiv = document.createElement('div');
+                loadingMessageDiv.classList.add('message', 'bot-message', 'clearfix');
+                loadingMessageDiv.innerHTML = `
+                    <div>
+                        🔍 Analyzing the image...
+                        <br>Status: Processing image for disease prediction
+                    </div>
+                `;
+                chatBody.appendChild(loadingMessageDiv);
+
+                // Scroll to bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                // Make AJAX request to prediction endpoint
+                fetch("{% url 'predict' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server response:', data);
+                        if (data.error) {
+                            throw new Error(data.error); // If there's an error in the response, throw it
+                        }
+                        // Remove loading message
+                        chatBody.removeChild(loadingMessageDiv);
+
+                        // Create prediction result message
+                        const predictionMessageDiv = document.createElement('div');
+                        predictionMessageDiv.classList.add('message', 'bot-message', 'clearfix');
+                        console.log(data.user)
+                        if (data.user == 1){
+
+                        predictionMessageDiv.innerHTML = `
+                            <div>
+                                <strong> Status:</strong>
+                                <b> ${data.response}</b>
+                                 <br>
+                                 
+                                ${data.response.toLowerCase() === 'normal' ? `
+                                    <div>
+                                        "Normal" or healthy refers to a state where the body is functioning without disease. It signifies that the immune system is effectively warding off infections, and the individual is free from underlying conditions that would affect normal bodily functions.
+                                        <br>
+                                        <br>
+                                        In a healthy state, the body is well-nourished, physically active, and free from illnesses. The body's vital systems (immune, cardiovascular, respiratory, etc.) are operating as they should. A healthy body maintains homeostasis — the ability to regulate internal conditions despite external changes.
+                                        <br>
+                                        <hr>
+                                        <ul>
+                                        <li> <b>Balanced Diet:</b> A well-rounded diet rich in vitamins, minerals, and nutrients supports immune function and overall health.</li>
+                                        
+                                        <li> <b>Exercise:</b>  Regular physical activity boosts the immune system, supports cardiovascular health, and promotes mental well-being.</li>
+                                        <li> <b>Mental Health:</b>  Managing stress through mindfulness, meditation, and maintaining a positive social network helps prevent mental health disorders.</li>
+                                        <li> <b>Routine Check-ups:</b>  Regular health screenings and check-ups help identify any early signs of potential health problems.</li>
+                                            </ul>
+                                          </div>
+                                ` : ''}
+                                ${data.response.toLowerCase() === 'bacterial pneumonia' ? `
+                                        <div>
+                                            <strong>Bacterial Pneumonia:</strong>
+                                            <br><br>
+                                            <strong>Reason:</strong> Bacterial pneumonia is caused by bacteria that infect the lungs. The most common bacterial pathogens include Streptococcus pneumoniae, Haemophilus influenzae, Mycoplasma pneumoniae, and Legionella pneumophila. These bacteria enter the lungs through inhalation of droplets, often after a respiratory infection like the flu or cold, or through direct aspiration of infected material from the mouth or throat.
+                                            <br><br>
+                                            <strong>Description:</strong> Bacterial pneumonia leads to inflammation of the lung tissue, resulting in the filling of alveoli (air sacs in the lungs) with pus, fluid, and bacteria. This impairs the exchange of oxygen and carbon dioxide, leading to breathing difficulties. Symptoms include:
+                                            <ul>
+                                                <li>High fever</li>
+                                                <li>Severe cough (often with green or yellow mucus)</li>
+                                                <li>Shortness of breath</li>
+                                                <li>Chest pain</li>
+                                                <li>Fatigue</li>
+                                                <li>Rapid breathing and increased heart rate</li>
+                                            </ul>
+                                            In severe cases, it can cause sepsis or respiratory failure.
+                                            <br><br>
+                                            <strong>Precaution:</strong>
+                                            <ul>
+                                                <li><b>Vaccination:</b> Pneumococcal vaccines protect against Streptococcus pneumoniae and other bacteria. The flu vaccine can also help reduce the risk of secondary bacterial infections.</li>
+                                                <li><b>Hygiene:</b> Wash hands frequently and cover your mouth when coughing or sneezing to prevent transmission.</li>
+                                                <li><b>Avoid smoking:</b> Smoking damages lung tissues and weakens the immune response.</li>
+                                                <li><b>Ventilation:</b> Good indoor ventilation can reduce bacterial buildup.</li>
+                                                <li><b>Healthy Immune System:</b> Maintaining good overall health and managing chronic conditions (such as diabetes) reduces the risk of infection.</li>
+                                            </ul>
+                                            <br>
+                                            <strong>Other Details:</strong>
+                                            <ul>
+                                                <li>Treatment typically involves antibiotics tailored to the specific bacteria causing the infection. In some cases, hospitalization is required for intravenous antibiotics and oxygen support.</li>
+                                                <li>People with weakened immune systems (such as those with HIV, cancer, or chronic respiratory conditions like COPD) are at higher risk of developing severe bacterial pneumonia.</li>
+                                                <li>If left untreated, bacterial pneumonia can be fatal, especially in vulnerable populations.</li>
+                                            </ul>
+                                        </div>
+                                    `:''}
+                                    ${data.response.toLowerCase() === 'corona virus disease' ? `
+                                        <div>
+                                            <strong>Corona Virus Disease (COVID-19):</strong>
+                                            <br><br>
+                                            <strong>Reason:</strong> COVID-19 is caused by the SARS-CoV-2 virus, which is primarily spread through respiratory droplets and aerosols from an infected person. It can also spread via surfaces that are contaminated by the virus. The virus affects the respiratory system and can lead to widespread inflammation in the body.
+                                            <br><br>
+                                            <strong>Description:</strong> COVID-19 symptoms vary from mild to severe. It primarily affects the lungs, causing pneumonia and acute respiratory distress syndrome (ARDS), but it can also affect other organs. Symptoms may appear 2-14 days after exposure to the virus and include:
+                                            <ul>
+                                                <li>Fever or chills</li>
+                                                <li>Cough</li>
+                                                <li>Shortness of breath or difficulty breathing</li>
+                                                <li>Fatigue</li>
+                                                <li>Muscle or body aches</li>
+                                                <li>Loss of taste or smell</li>
+                                                <li>Sore throat</li>
+                                                <li>Headache</li>
+                                                <li>Congestion or runny nose</li>
+                                                <li>Nausea or vomiting</li>
+                                            </ul>
+                                            Severe cases may require mechanical ventilation or intensive care, particularly in older adults and those with underlying health conditions like cardiovascular disease, diabetes, or lung disease.
+                                            <br><br>
+                                            <strong>Precaution:</strong>
+                                            <ul>
+                                                <li><b>Vaccination:</b> The COVID-19 vaccine reduces the severity of the disease and the likelihood of hospitalization.</li>
+                                                <li><b>Hygiene:</b> Wash hands regularly, avoid touching the face, and disinfect frequently touched surfaces.</li>
+                                                <li><b>Masks:</b> Wear a mask in crowded or poorly ventilated areas to protect yourself and others.</li>
+                                                <li><b>Physical distancing:</b> Maintain a safe distance (at least 6 feet) from others, particularly in crowded places.</li>
+                                                <li><b>Stay home if sick:</b> Isolate from others if you feel unwell to prevent the spread of the virus.</li>
+                                            </ul>
+                                            <br>
+                                            <strong>Other Details:</strong>
+                                            <ul>
+                                                <li>Treatment for mild cases often involves supportive care, including rest, hydration, and over-the-counter medications for fever and pain relief.</li>
+                                                <li>Severe cases may require oxygen therapy, steroids, and antiviral drugs (e.g., remdesivir).</li>
+                                                <li><b>Long COVID:</b> Some people experience long-term symptoms even after recovery, including fatigue, brain fog, joint pain, and respiratory issues.</li>
+                                                <li>The emergence of variants (such as Delta and Omicron) has influenced the severity and transmissibility of the virus.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                                    ${data.response.toLowerCase() === 'tuberculosis' ? `
+                                        <div>
+                                            <strong>Tuberculosis (TB):</strong>
+                                            <br><br>
+                                            <strong>Reason:</strong> Tuberculosis (TB) is caused by the bacterium Mycobacterium tuberculosis, which primarily affects the lungs but can also spread to other parts of the body, including the kidneys, bones, and brain. TB spreads through the air when an infected person coughs or sneezes, releasing bacteria into the environment.
+                                            <br><br>
+                                            <strong>Description:</strong> TB infection can be latent (where the person carries the bacteria but doesn't show symptoms) or active (where the bacteria multiply and cause illness). Active TB causes symptoms such as:
+                                            <ul>
+                                                <li>Persistent cough (often lasting more than 3 weeks)</li>
+                                                <li>Coughing up blood or sputum</li>
+                                                <li>Night sweats</li>
+                                                <li>Fever</li>
+                                                <li>Weight loss</li>
+                                                <li>Fatigue</li>
+                                                <li>Shortness of breath</li>
+                                            </ul>
+                                            Without treatment, TB can be fatal, especially if the infection spreads to other organs.
+                                            <br><br>
+                                            <strong>Precaution:</strong>
+                                            <ul>
+                                                <li><b>Vaccination:</b> The BCG vaccine can provide protection, especially in areas with high TB prevalence.</li>
+                                                <li><b>Hygiene:</b> Cover your mouth when coughing or sneezing, and avoid close contact with people who have active TB.</li>
+                                                <li><b>Ventilation:</b> Properly ventilating living spaces reduces the risk of airborne transmission.</li>
+                                                <li><b>Treatment adherence:</b> People diagnosed with TB must complete the full course of antibiotics to prevent the development of drug-resistant strains.</li>
+                                            </ul>
+                                            <br>
+                                            <strong>Other Details:</strong>
+                                            <ul>
+                                                <li>TB treatment involves a long course (6 to 9 months) of antibiotics, often including drugs like isoniazid, rifampicin, and ethambutol.</li>
+                                                <li>Drug-resistant TB (MDR-TB) is a major global health concern, requiring stronger, more expensive treatment regimens.</li>
+                                                <li>TB is closely linked to HIV/AIDS, as weakened immune systems are more vulnerable to TB infections.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                                    ${data.response.toLowerCase() === 'viral pneumonia' ? `
+                                        <div>
+                                            <strong>Viral Pneumonia:</strong>
+                                            <br><br>
+                                            <strong>Reason:</strong> Viral pneumonia is caused by various viruses, including the influenza virus, respiratory syncytial virus (RSV), parainfluenza virus, and coronaviruses. These viruses invade the lung tissues and cause inflammation in the air sacs (alveoli), resulting in impaired oxygen exchange.
+                                            <br><br>
+                                            <strong>Description:</strong> Symptoms of viral pneumonia may be milder than bacterial pneumonia but can still be serious, especially in infants, elderly individuals, and those with weakened immune systems. Symptoms include:
+                                            <ul>
+                                                <li>Fever and chills</li>
+                                                <li>Cough (often dry or with clear mucus)</li>
+                                                <li>Fatigue and weakness</li>
+                                                <li>Shortness of breath</li>
+                                                <li>Chest pain (in some cases)</li>
+                                                <li>Sore throat and runny nose</li>
+                                            </ul>
+                                            RSV pneumonia is particularly common in young children and the elderly. It can cause wheezing and severe difficulty breathing.
+                                            <br><br>
+                                            <strong>Precaution:</strong>
+                                            <ul>
+                                                <li><b>Vaccination:</b> Vaccines like the flu shot can help prevent viral pneumonia caused by influenza. RSV vaccines are available for high-risk infants.</li>
+                                                <li><b>Hand hygiene:</b> Frequent handwashing and respiratory hygiene (covering coughs and sneezes) reduce viral transmission.</li>
+                                                <li><b>Avoid exposure:</b> Stay away from sick people, especially during flu season.</li>
+                                                <li><b>Boost immunity:</b> A healthy diet, regular exercise, and adequate sleep help strengthen the immune system.</li>
+                                            </ul>
+                                            <br>
+                                            <strong>Other Details:</strong>
+                                            <ul>
+                                                <li>Viral pneumonia is often treated with supportive care (hydration, pain relievers, and fever reducers). In some cases, antiviral medications like oseltamivir (Tamiflu) for influenza can be prescribed.</li>
+                                                <li>It is typically self-limiting in healthy individuals, but it can lead to severe complications like secondary bacterial infections or ARDS, especially in vulnerable populations.</li>
+                                                <li>RSV infections are a major cause of pneumonia and bronchiolitis in young children and infants.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                            </div>
+                        `;
+                        }
+                        else {
+                            predictionMessageDiv.innerHTML = `
+                            <div>
+                                <strong> Status:</strong>
+                                <b> ${data.response}</b>
+                                 <br>
+                                 ${data.response.toLowerCase() === 'bacterial pneumonia' ? `
+                                        <div>
+                                            <strong>Bacterial Pneumonia:</strong>
+                                            <br><br>
+                                            Bacterial pneumonia is caused by infection from various bacteria, such as Streptococcus pneumoniae, Haemophilus influenzae, and Legionella pneumophila. These bacteria invade the lungs, typically after a respiratory infection like the flu or cold, or through direct aspiration of infected material.
+                                            <br><br>
+                                            <strong>Symptoms:</strong> Symptoms may include high fever, chills, cough (often with yellow or green mucus), difficulty breathing, chest pain, and fatigue. Severe pneumonia can result in respiratory failure, septic shock, or organ dysfunction, especially if left untreated.
+                                            <br><br>
+                                            <strong>Next Steps:</strong>
+                                            <ul>
+                                                <li><b>Medical Consultation:</b> Seek a doctor immediately if pneumonia symptoms appear. A diagnosis typically involves a physical exam, chest X-ray, and sometimes sputum cultures or blood tests.</li>
+                                                <li><b>Antibiotic Treatment:</b> Most bacterial pneumonia cases require antibiotics, typically given intravenously if severe.</li>
+                                                <li><b>Oxygen Therapy:</b> In severe cases, patients may need supplemental oxygen or mechanical ventilation.</li>
+                                                <li><b>Post-treatment Care:</b> Rest, hydration, and follow-up visits are essential for recovery, with close monitoring for potential complications.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+
+                                    ${data.response.toLowerCase() === 'corona virus disease' ? `
+                                        <div>
+                                            <strong>Corona Virus Disease (COVID-19):</strong>
+                                            <br><br>
+                                            COVID-19 is caused by the SARS-CoV-2 virus, which primarily spreads through respiratory droplets and aerosols. The virus infects the lungs, potentially causing severe respiratory illness and damage to other organs.
+                                            <br><br>
+                                            <strong>Symptoms:</strong> Fever, dry cough, fatigue, shortness of breath, body aches, loss of taste or smell, and in severe cases, pneumonia, ARDS, or organ failure.
+                                            <br><br>
+                                            <strong>Next Steps:</strong>
+                                            <ul>
+                                                <li><b>Testing:</b> If symptoms appear, get a COVID-19 test (PCR or rapid antigen) to confirm infection.</li>
+                                                <li><b>Self-isolation:</b> Isolate at home or in a medical facility, depending on symptom severity, to prevent the spread.</li>
+                                                <li><b>Hospital Care:</b> For severe cases, hospitalization may be required, where patients may receive oxygen therapy, antivirals like Remdesivir, and steroids.</li>
+                                                <li><b>Vaccination:</b> Even after recovery, vaccination is strongly recommended to prevent reinfection or severe illness from variants.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+
+                                    ${data.response.toLowerCase() === 'normal' ? `
+                                        <div>
+                                            <strong>Normal (Healthy State):</strong>
+                                            <br><br>
+                                            The normal state refers to the absence of any disease. The immune system is functioning effectively, and the body is well-nourished and balanced.
+                                            <br><br>
+                                            <strong>Description:</strong> In a healthy state, the body maintains internal balance (homeostasis) with all organ systems working efficiently. There are no infections, and the body is free from chronic diseases or disorders.
+                                            <br><br>
+                                            <strong>Next Steps:</strong>
+                                            <ul>
+                                                <li><b>Preventative Care:</b> Maintain a balanced diet, exercise regularly, stay hydrated, and get enough sleep.</li>
+                                                <li><b>Routine Check-ups:</b> Regular health screenings help detect potential issues early.</li>
+                                                <li><b>Mental Well-being:</b> Manage stress through mindfulness, relaxation techniques, and staying connected socially.</li>
+                                                <li><b>Healthy Habits:</b> Avoid smoking, excessive alcohol consumption, and ensure good hygiene practices to maintain overall health.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+
+                                    ${data.response.toLowerCase() === 'tuberculosis' ? `
+                                        <div>
+                                            <strong>Tuberculosis (TB):</strong>
+                                            <br><br>
+                                            TB is caused by Mycobacterium tuberculosis, which primarily affects the lungs but can spread to other organs. It spreads through the air when an infected person coughs, sneezes, or talks.
+                                            <br><br>
+                                            <strong>Symptoms:</strong> Chronic cough lasting over 3 weeks, coughing up blood, chest pain, weight loss, fever, night sweats, and fatigue. TB can also cause severe complications if untreated.
+                                            <br><br>
+                                            <strong>Next Steps:</strong>
+                                            <ul>
+                                                <li><b>Diagnosis:</b> A doctor will conduct a tuberculin skin test, chest X-ray, and sputum culture to confirm TB infection.</li>
+                                                <li><b>Antibiotic Treatment:</b> TB requires long-term treatment with a combination of antibiotics (6-9 months). It's crucial to complete the full course to prevent drug-resistant strains.</li>
+                                                <li><b>Hospitalization:</b> People with drug-resistant TB or severe symptoms may need inpatient care, especially if they also have other health conditions like HIV.</li>
+                                                <li><b>Vaccination:</b> The BCG vaccine provides partial protection, especially in high-risk regions.</li>
+                                                <li><b>Contact Tracing:</b> Close contacts of individuals diagnosed with TB should be tested and monitored.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+
+                                    ${data.response.toLowerCase() === 'viral pneumonia' ? `
+                                        <div>
+                                            <strong>Viral Pneumonia:</strong>
+                                            <br><br>
+                                            Viral pneumonia is caused by several viruses, such as the influenza virus, respiratory syncytial virus (RSV), or coronaviruses. The infection leads to inflammation in the lungs, making it difficult to breathe.
+                                            <br><br>
+                                            <strong>Symptoms:</strong> Mild symptoms like fever, cough (often dry), fatigue, and shortness of breath. In some cases, chest pain and wheezing can also occur. RSV is particularly concerning for young children and the elderly.
+                                            <br><br>
+                                            <strong>Next Steps:</strong>
+                                            <ul>
+                                                <li><b>Diagnosis:</b> Diagnosis is made through a physical exam, chest X-ray, and testing for specific viruses (such as influenza or RSV).</li>
+                                                <li><b>Supportive Treatment:</b> For most viral pneumonia cases, supportive care is sufficient, including hydration, rest, and pain relievers.</li>
+                                                <li><b>Antiviral Medications:</b> In cases of influenza or RSV, antiviral drugs like oseltamivir (Tamiflu) may be prescribed to reduce symptoms and duration.</li>
+                                                <li><b>Oxygen Therapy:</b> For patients with severe breathing difficulties, oxygen supplementation may be necessary.</li>
+                                                <li><b>Prevention:</b> Vaccines like the flu vaccine and RSV vaccines can help prevent certain types of viral pneumonia.</li>
+                                            </ul>
+                                        </div>
+                                    ` : ''} 
+
+                            </div>
+                                 `;
+                        }
+                        chatBody.appendChild(predictionMessageDiv);
+
+                        // Scroll to bottom
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    })
+                    .catch(error => {
+                        console.error('Prediction error:', error);
+
+                        // Remove loading message
+                        chatBody.removeChild(loadingMessageDiv);
+
+                        // Create error message
+                        const errorMessageDiv = document.createElement('div');
+                        errorMessageDiv.classList.add('message', 'bot-message', 'clearfix');
+                        errorMessageDiv.innerHTML = `
+                            <div>
+                                <strong>Error:</strong>
+                                <br>${error.message || "Unable to process the image. Please try again."}
+                            </div>
+                        `;
+                        chatBody.appendChild(errorMessageDiv);
+
+                        // Scroll to bottom
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    });
+            }
+
+
+            function sendMessage() {
+                    const chatBody = document.getElementById('chatBody');
+                    const userInput = document.getElementById('userInput');
+                    const imageUpload = document.getElementById('imageUpload');
+
+                    if (userInput.value.trim() || imageUpload.files.length > 0) {
+                        // User Message
+                        const userMessageDiv = document.createElement('div');
+                        userMessageDiv.classList.add('message', 'user-message', 'clearfix');
+                        userMessageDiv.innerHTML = ` 
+                            <p>${userInput.value }</p>
+                            ${imageUpload.files.length > 0 ? 
+                                `<img src="${URL.createObjectURL(imageUpload.files[0])}" 
+                                    style="max-width: 50px; max-height: 50px; margin-top: 10px; border-radius: 8px;">` 
+                                : ''} 
+                        `;
+                        chatBody.appendChild(userMessageDiv);
+
+                        // Scroll to bottom
+                        chatBody.scrollTop = chatBody.scrollHeight;
+
+                        // // Clear inputs
+                       
+                        document.getElementById('imagePreview').style.display = 'none';
+
+                        // Chatbot Response
+                        const botResponseDiv = document.createElement('div');
+                        botResponseDiv.classList.add('message', 'bot-message', 'clearfix');
+
+                        let botResponse = '';
+
+                        // Check for user input and respond accordingly
+                        const userText = userInput.value.trim().toLowerCase();
+
+                        if (userText.includes('hello') || userText.includes('hi')) {
+                            botResponse = 'Hello! How can I assist you today?';
+                        } else if (userText.includes('how are you')) {
+                            botResponse = 'I am just a bot, but I am here to help you!';
+                        } else if (userText.includes('help')) {
+                            botResponse = 'Sure! I can assist you with information about diseases, symptoms, and more. Just ask!';
+                        } else if (userText.includes('thank you')) {
+                            botResponse = 'You\'re welcome! Feel free to ask if you need anything else.';
+                        } else if (userText.includes('bye')) {
+                            botResponse = 'Goodbye! Have a great day!';
+                        }
+                        // } else if (userText.trim() === '' || imageUpload.files.length < 0) {
+                        //     botResponse = 'Please type a message or upload an image.';
+                        // } else {
+                        //     botResponse = 'I didn\'t quite understand that. Could you please clarify?';
+                        // }
+
+                        // Add bot response
+                        botResponseDiv.innerHTML = `<p>${botResponse}</p>`;
+                        chatBody.appendChild(botResponseDiv);
+                        
+                        // Scroll to bottom again after bot's message
+                        chatBody.scrollTop = chatBody.scrollHeight;
+
+                        // Predict disease if image is uploaded
+                        if (imageUpload.files.length > 0) {
+                            predictDisease(imageUpload.files[0]);
+                        }
+                        userInput.value = '';
+                        imageUpload.value = '';
+                    }
+                }
+
+    </script>
+{% endblock %}

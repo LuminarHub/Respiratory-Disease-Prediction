@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LungWell - Signup</title>
+    <link rel="shortcut icon" type="image/icon" href="{% static 'images/short.webp' %}" style="border-radius: 0.75rem;">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="{% static 'css/reg.css' %}">
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-image" style="background-image: url({% static 'images/login.png' %});"></div>
+        <div class="signup-form">
+            <h2>Sign Up</h2>
+            <form id="signupForm" method="post">
+                {% csrf_token %}
+                {% comment %} {{form.errors}} {% endcomment %}
+                {% comment %} <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="firstname" name="first_name" placeholder="Firstname" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="last_name" placeholder="Lastname" required>
+                </div> {% endcomment %}
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    
+                    <input type="checkbox" name="is_student" style="margin-left: 10px;" >
+                    <div class="input-icon">
+                        <span>Student</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password1" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password2" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <button type="submit" class="signup-btn" onclick="myFunction()">Sign Up</button>
+                
+                <!-- <div class="form-extras">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div> -->
+                
+                <div class="login-link">
+                    Already have an account? <a href="{% url 'log' %}">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            {% for message in messages %}
+                Swal.fire({
+                    title: 'Alert',
+                    text: "{{ message }}",
+                    icon: '{% if message.tags == "success" %}success{% else %}error{% endif %}',
+                    confirmButtonText: 'OK'
+                });
+            {% endfor %}
+        });
+    </script>
+{% endif %}
+
+</body>
+</html>
