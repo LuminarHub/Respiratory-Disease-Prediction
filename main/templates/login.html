@@ -19,6 +19,7 @@
             <h2>Welcome Back</h2>
             <form id="loginForm" method="post">
                 {% csrf_token %}
+                {{form.errors}}
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" id="username" placeholder="Username" name="username" required>

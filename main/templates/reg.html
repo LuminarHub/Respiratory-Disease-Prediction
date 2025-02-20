@@ -16,6 +16,7 @@
             <h2>Sign Up</h2>
             <form id="signupForm" method="post">
                 {% csrf_token %}
+                {{form.errors}}
                 {% comment %} {{form.errors}} {% endcomment %}
                 {% comment %} <div class="input-group">
                     <i class="fas fa-user"></i>

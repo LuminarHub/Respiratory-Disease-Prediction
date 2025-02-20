@@ -1,6 +1,7 @@
-{% load static %}
-<!doctype html>
+
+<!Doctype html>
 <html lang="en">
+    {% load static %}
   <head>
     <title>LungWell</title>
     <!-- Required meta tags -->
@@ -14,6 +15,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     #showcase-background-1 {
    
@@ -42,10 +45,21 @@
                                 </a>
                         </li>
                     
-                        <li class="nav-item ml-5">
-                            <a class=" btn btn-outline-danger nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'predict' %}">Start Diagnosis </a>
+                        <li class="nav-item ml-2">
+                            <a class=" btn  nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'doc' %}">Doctors</a>
                         </li>
-                        <li class="nav-item ml-5">
+                        <li class="nav-item ml-2">
+                            <a class=" btn  nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'chat_history' %}"> History </a>
+                        </li>
+                        {% if request.user.is_student %}
+                        <li class="nav-item ml-2">
+                            <a class=" btn  nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'all_history' %}"> All </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item ml-2">
+                            <a class=" btn btn-outline-danger nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'predict' %}"> Diagnosis </a>
+                        </li>
+                        <li class="nav-item ml-2">
                             <a class=" nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'logout' %}">Logout</a>
                         </li>
                     </ul>

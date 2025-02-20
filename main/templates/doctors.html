@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+  <head>
+    <title>LungWell - Our Specialists</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/icon" href="{% static 'images/short.webp' %}" style="border-radius: 0.75rem;">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <style>
+        .doctor-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+        .doctor-img {
+            height: 200px;
+            object-fit: cover;
+            border-radius:0.75rem;
+        }
+        .specialization-badge {
+            background-color:rgb(53, 125, 220);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+        .card-title{
+                color:black;
+                padding:10px;
+                text-align:center;
+        }
+    </style>
+  </head>
+  
+  <body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark-secondary sticky-top">
+            <div class="container">
+                <a href="{% url 'h' %}" class="navbar-brand" href="#" style="font-size: 30px;font-family: 'Times New Roman', Times, serif;font-style: italic;">LungWell</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'h' %}">Home
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                        </li>
+                    
+                        <li class="nav-item ml-5">
+                            <a class=" btn btn-outline-info nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'doc' %}">Doctors</a>
+                        </li>
+                        <li class="nav-item ml-5">
+                            <a class=" btn btn-outline-danger nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'predict' %}">Start Diagnosis </a>
+                        </li>
+                        <li class="nav-item ml-5">
+                            <a class=" nav-link text-uppercase font-weight-100 letter-spacing-4px" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="bg-dark-secondary text-white py-5">
+            <div class="container">
+                <h1 class="text-center mb-5">Our Respiratory Specialists</h1>
+                
+                <div class="row">
+                    <!-- Doctor 1 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Sarah Mitchell">
+                            <div class="card-body">
+                                <span class="specialization-badge">Pulmonologist</span>
+                                <h5 class="card-title">Dr. Sarah Mitchell, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 15 years<br>
+                                    <strong>Specialization:</strong> Adult Pulmonology<br>
+                                    <strong>Hospital:</strong> Central Respiratory Care Center<br>
+                                    <strong>Contact:</strong> (555) 123-4567<br>
+                                    <strong>Email:</strong> dr.mitchell@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 2 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. James Wilson">
+                            <div class="card-body">
+                                <span class="specialization-badge">Thoracic Surgeon</span>
+                                <h5 class="card-title">Dr. James Wilson, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 20 years<br>
+                                    <strong>Specialization:</strong> Thoracic Surgery<br>
+                                    <strong>Hospital:</strong> Memorial Hospital<br>
+                                    <strong>Contact:</strong> (555) 234-5678<br>
+                                    <strong>Email:</strong> dr.wilson@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 3 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Emily Chen">
+                            <div class="card-body">
+                                <span class="specialization-badge">Pediatric Pulmonologist</span>
+                                <h5 class="card-title">Dr. Emily Chen, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 12 years<br>
+                                    <strong>Specialization:</strong> Pediatric Pulmonology<br>
+                                    <strong>Hospital:</strong> Children's Respiratory Institute<br>
+                                    <strong>Contact:</strong> (555) 345-6789<br>
+                                    <strong>Email:</strong> dr.chen@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 4 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Michael Brown">
+                            <div class="card-body">
+                                <span class="specialization-badge">Interventional Pulmonologist</span>
+                                <h5 class="card-title">Dr. Michael Brown, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 18 years<br>
+                                    <strong>Specialization:</strong> Interventional Pulmonology<br>
+                                    <strong>Hospital:</strong> Advanced Lung Care Center<br>
+                                    <strong>Contact:</strong> (555) 456-7890<br>
+                                    <strong>Email:</strong> dr.brown@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 5 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Lisa Martinez">
+                            <div class="card-body">
+                                <span class="specialization-badge">Sleep Medicine Specialist</span>
+                                <h5 class="card-title">Dr. Lisa Martinez, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 14 years<br>
+                                    <strong>Specialization:</strong> Sleep Medicine & Pulmonology<br>
+                                    <strong>Hospital:</strong> Sleep & Respiratory Center<br>
+                                    <strong>Contact:</strong> (555) 567-8901<br>
+                                    <strong>Email:</strong> dr.martinez@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 6 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Robert Taylor">
+                            <div class="card-body">
+                                <span class="specialization-badge">Critical Care Specialist</span>
+                                <h5 class="card-title">Dr. Robert Taylor, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 22 years<br>
+                                    <strong>Specialization:</strong> Critical Care Medicine<br>
+                                    <strong>Hospital:</strong> Intensive Care Unit<br>
+                                    <strong>Contact:</strong> (555) 678-9012<br>
+                                    <strong>Email:</strong> dr.taylor@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More doctors... -->
+                    <!-- Doctor 7 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Anna Kumar">
+                            <div class="card-body">
+                                <span class="specialization-badge">Respiratory Therapist</span>
+                                <h5 class="card-title">Dr. Anna Kumar, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 10 years<br>
+                                    <strong>Specialization:</strong> Respiratory Therapy<br>
+                                    <strong>Hospital:</strong> Breathing Care Center<br>
+                                    <strong>Contact:</strong> (555) 789-0123<br>
+                                    <strong>Email:</strong> dr.kumar@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 8 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. David Park">
+                            <div class="card-body">
+                                <span class="specialization-badge">Allergy & Pulmonology</span>
+                                <h5 class="card-title">Dr. David Park, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 16 years<br>
+                                    <strong>Specialization:</strong> Allergy & Pulmonology<br>
+                                    <strong>Hospital:</strong> Allergy & Respiratory Institute<br>
+                                    <strong>Contact:</strong> (555) 890-1234<br>
+                                    <strong>Email:</strong> dr.park@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 9 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Rachel Green">
+                            <div class="card-body">
+                                <span class="specialization-badge">Research Pulmonologist</span>
+                                <h5 class="card-title">Dr. Rachel Green, MD, PhD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 19 years<br>
+                                    <strong>Specialization:</strong> Clinical Research<br>
+                                    <strong>Hospital:</strong> Research Medical Center<br>
+                                    <strong>Contact:</strong> (555) 901-2345<br>
+                                    <strong>Email:</strong> dr.green@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 10 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Thomas Lee">
+                            <div class="card-body">
+                                <span class="specialization-badge">Oncological Pulmonologist</span>
+                                <h5 class="card-title">Dr. Thomas Lee, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 21 years<br>
+                                    <strong>Specialization:</strong> Pulmonary Oncology<br>
+                                    <strong>Hospital:</strong> Cancer Treatment Center<br>
+                                    <strong>Contact:</strong> (555) 012-3456<br>
+                                    <strong>Email:</strong> dr.lee@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 11 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Sofia Rodriguez">
+                            <div class="card-body">
+                                <span class="specialization-badge">Rehabilitation Specialist</span>
+                                <h5 class="card-title">Dr. Sofia Rodriguez, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 13 years<br>
+                                    <strong>Specialization:</strong> Pulmonary Rehabilitation<br>
+                                    <strong>Hospital:</strong> Rehabilitation Center<br>
+                                    <strong>Contact:</strong> (555) 123-7890<br>
+                                    <strong>Email:</strong> dr.rodriguez@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 12 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. William Johnson">
+                            <div class="card-body">
+                                <span class="specialization-badge">COPD Specialist</span>
+                                <h5 class="card-title">Dr. William Johnson, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 17 years<br>
+                                    <strong>Specialization:</strong> COPD Management<br>
+                                    <strong>Hospital:</strong> COPD Treatment Center<br>
+                                    <strong>Contact:</strong> (555) 234-8901<br>
+                                    <strong>Email:</strong> dr.johnson@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 13 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Maria Santos">
+                            <div class="card-body">
+                                <span class="specialization-badge">Asthma Specialist</span>
+                                <h5 class="card-title">Dr. Maria Santos, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 11 years<br>
+                                    <strong>Specialization:</strong> Asthma Care<br>
+                                    <strong>Hospital:</strong> Asthma & Allergy Center<br>
+                                    <strong>Contact:</strong> (555) 345-9012<br>
+                                    <strong>Email:</strong> dr.santos@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 14 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Richard Thompson">
+                            <div class="card-body">
+                                <span class="specialization-badge">Respiratory Infections</span>
+                                <h5 class="card-title">Dr. Richard Thompson, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 23 years<br>
+                                    <strong>Specialization:</strong> Respiratory Infections<br>
+                                    <strong>Hospital:</strong> Infectious Disease Center<br>
+                                    <strong>Contact:</strong> (555) 456-0123<br>
+                                    <strong>Email:</strong> dr.thompson@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 15 -->
+                    <div class="col-md-4">
+                        <div class="card doctor-card">
+                            <img src="{% static 'images/doc.png' %}" class="card-img-top doctor-img" alt="Dr. Amanda White">
+                            <div class="card-body">
+                                <span class="specialization-badge">Pediatric Sleep Medicine</span>
+                                <h5 class="card-title">Dr. Amanda White, MD</h5>
+                                <p class="card-text">
+                                    <strong>Experience:</strong> 14 years<br>
+                                    <strong>Specialization:</strong> Pediatric Sleep & Breathing<br>
+                                    <strong>Hospital:</strong> Children's Sleep Center<br>
+                                    <strong>Contact:</strong> (555) 567-1234<br>
+                                    <strong>Email:</strong> dr.white@lungwell.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-dark text-white py-4">
+            <div class="container">
+                <h2 class="text-center mb-4">Emergency Contacts</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">24/7 Emergency Hotline</h5>
+                                <p class="card-text">
+                                    <strong>Emergency Number:</strong> (555) 911-0000<br>
+                                    <strong>Ambulance Service:</strong> (555) 911-1111<br>
+                                    
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center text-white pt-3 pb-3" style="background-color:black;">
+        <div class="container">
+            <p>&copy; 2024 LungWell - Respiratory Disease Information Center</p>
+        </div>
+    </footer>
+  </body>
+</html>

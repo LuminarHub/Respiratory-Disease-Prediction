@@ -1,0 +1,63 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block bot %}
+<div class="container mt-5">
+    <h2 class="mb-4">Your Medical History</h2>
+    
+    <div class="chat-history-container">
+        {% for entry in chat_history %}
+            <div class="card mb-3 {% if entry.message_type == 'USER' %}border-primary{% elif entry.message_type == 'BOT' %}border-success{% else %}border-info{% endif %}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>{{ entry.timestamp|date:"F d, Y H:i" }}</span>
+                   
+                </div>
+                <div class="card-body">
+                    {% if entry.message_type == 'IMAGE' %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="image-container mb-3">
+                                    <img src="{{ entry.image.url }}" alt="Uploaded X-ray" class="img-fluid">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                {% if entry.prediction %}
+                                    <div class="prediction-result">
+                                        <h5>Diagnosis:</h5>
+                                        <p class="mb-3">{{ entry.prediction }}</p>
+                                        
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="card-text">
+                            <strong>{% if entry.message_type == 'USER' %}You{% else %}Bot{% endif %}:</strong>
+                            {{ entry.text_content }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-info">
+                No medical history found.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .chat-history-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .image-container {
+        text-align: center;
+    }
+    .prediction-result {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}

@@ -52,6 +52,7 @@
                 <div class="flex-grow-1">
                     <textarea 
                         id="userInput" 
+                        name="userInput"
                         class="form-control" 
                         placeholder="Type your message or health concern..."
                         rows="2"></textarea>
@@ -100,12 +101,11 @@
             }
         }
 
-        function predictDisease(imageFile) {
-                const chatBody = document.getElementById('chatBody');
-                const formData = new FormData();
+        function predictDisease(imageFile, Groq_prompt) {
+            const chatBody = document.getElementById('chatBody');
+            const formData = new FormData();
+            if (imageFile) {
                 formData.append('image', imageFile);
-
-                // Create loading message
                 const loadingMessageDiv = document.createElement('div');
                 loadingMessageDiv.classList.add('message', 'bot-message', 'clearfix');
                 loadingMessageDiv.innerHTML = `
@@ -118,6 +118,12 @@
 
                 // Scroll to bottom
                 chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            if (Groq_prompt) {
+                formData.append('userInput', Groq_prompt);
+            }
+            
+              
 
                 // Make AJAX request to prediction endpoint
                 fetch("{% url 'predict' %}", {
@@ -134,18 +140,19 @@
                             throw new Error(data.error); // If there's an error in the response, throw it
                         }
                         // Remove loading message
-                        chatBody.removeChild(loadingMessageDiv);
+                        // chatBody.removeChild(loadingMessageDiv);
 
                         // Create prediction result message
                         const predictionMessageDiv = document.createElement('div');
                         predictionMessageDiv.classList.add('message', 'bot-message', 'clearfix');
                         console.log(data.user)
+                        if (data.response){
                         if (data.user == 1){
 
                         predictionMessageDiv.innerHTML = `
                             <div>
                                 <strong> Status:</strong>
-                                <b> ${data.response}</b>
+                             
                                  <br>
                                  
                                 ${data.response.toLowerCase() === 'normal' ? `
@@ -409,6 +416,16 @@
                             </div>
                                  `;
                         }
+                    }
+                    else if(data.groq) {
+                        predictionMessageDiv.innerHTML = `
+                            <div>
+                                <strong> </strong>  
+                                ${data.groq}}                          
+                                 <br>
+                                 </div>
+                            `
+                    }
                         chatBody.appendChild(predictionMessageDiv);
 
                         // Scroll to bottom
@@ -421,15 +438,15 @@
                         chatBody.removeChild(loadingMessageDiv);
 
                         // Create error message
-                        const errorMessageDiv = document.createElement('div');
-                        errorMessageDiv.classList.add('message', 'bot-message', 'clearfix');
-                        errorMessageDiv.innerHTML = `
-                            <div>
-                                <strong>Error:</strong>
-                                <br>${error.message || "Unable to process the image. Please try again."}
-                            </div>
-                        `;
-                        chatBody.appendChild(errorMessageDiv);
+                        // const errorMessageDiv = document.createElement('div');
+                        // errorMessageDiv.classList.add('message', 'bot-message', 'clearfix');
+                        // errorMessageDiv.innerHTML = `
+                        //     <div>
+                        //         <strong>Error:</strong>
+                        //         <br>${error.message || "Unable to process the image. Please try again."}
+                        //     </div>
+                        // `;
+                        // chatBody.appendChild(errorMessageDiv);
 
                         // Scroll to bottom
                         chatBody.scrollTop = chatBody.scrollHeight;
@@ -437,7 +454,7 @@
             }
 
 
-            function sendMessage() {
+            async function sendMessage() {
                     const chatBody = document.getElementById('chatBody');
                     const userInput = document.getElementById('userInput');
                     const imageUpload = document.getElementById('imageUpload');
@@ -446,20 +463,19 @@
                         // User Message
                         const userMessageDiv = document.createElement('div');
                         userMessageDiv.classList.add('message', 'user-message', 'clearfix');
-                        userMessageDiv.innerHTML = ` 
-                            <p>${userInput.value }</p>
+                        userMessageDiv.innerHTML = `
+                            <p style="color:white;">${userInput.value}</p>
                             ${imageUpload.files.length > 0 ? 
                                 `<img src="${URL.createObjectURL(imageUpload.files[0])}" 
-                                    style="max-width: 50px; max-height: 50px; margin-top: 10px; border-radius: 8px;">` 
-                                : ''} 
+                                    style="max-width: 50px; max-height: 50px; margin-top: 10px; border-radius: 8px;">`
+                                : ''}
                         `;
                         chatBody.appendChild(userMessageDiv);
 
                         // Scroll to bottom
                         chatBody.scrollTop = chatBody.scrollHeight;
 
-                        // // Clear inputs
-                       
+                        // Clear inputs
                         document.getElementById('imagePreview').style.display = 'none';
 
                         // Chatbot Response
@@ -481,28 +497,31 @@
                             botResponse = 'You\'re welcome! Feel free to ask if you need anything else.';
                         } else if (userText.includes('bye')) {
                             botResponse = 'Goodbye! Have a great day!';
+                        } else {
+                            // GROQ Integration
+                            botResponse =predictDisease(null, userText);
                         }
-                        // } else if (userText.trim() === '' || imageUpload.files.length < 0) {
-                        //     botResponse = 'Please type a message or upload an image.';
-                        // } else {
-                        //     botResponse = 'I didn\'t quite understand that. Could you please clarify?';
-                        // }
 
                         // Add bot response
+                        if (botResponse){
                         botResponseDiv.innerHTML = `<p>${botResponse}</p>`;
                         chatBody.appendChild(botResponseDiv);
-                        
+                        }
                         // Scroll to bottom again after bot's message
                         chatBody.scrollTop = chatBody.scrollHeight;
 
                         // Predict disease if image is uploaded
                         if (imageUpload.files.length > 0) {
-                            predictDisease(imageUpload.files[0]);
+                            predictDisease(imageUpload.files[0], null);
                         }
+
                         userInput.value = '';
                         imageUpload.value = '';
                     }
                 }
+
+               
+
 
     </script>
 {% endblock %}

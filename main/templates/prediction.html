@@ -92,7 +92,7 @@ body {
            {% if bot_response %}
                <p class="mb-1">You: {{ user_input }} </p>
                <p class="mb-1"><div class="response" >
-                   <h3>Prediction Result: {{ response }}</h3>
+                   <h3>Prediction Result: {{ response }}{{error}}</h3>
                </div></p>
                <p>Response: {{ bot_response }}</p>
            {% endif %}
